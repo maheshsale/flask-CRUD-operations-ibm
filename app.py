@@ -12,11 +12,18 @@ transactions = [
     {'id': 3, 'date': '2023-06-03', 'amount': 300}
 ]
 
+def calculate_balance():
+    balance = 0
+    for transaction in transactions:
+        balance += transaction["amount"]
+    return balance
+
 # Read operation
 # Read operation: List all transactions
 @app.route("/")
 def get_transactions():
-    return render_template("transactions.html", transactions=transactions)
+    balance = calculate_balance()
+    return render_template("transactions.html", transactions=transactions, balance=balance)
 
 # Create operation: Display add transaction form
 # Route to handle the creation of a new transaction
@@ -94,6 +101,10 @@ def search_transactions():
     else:
         return render_template('search.html')
 
+@app.route('/balance')
+def total_balance():
+    balance = calculate_balance()
+    return f"<h3>Total Balance: {balance}</h3>"
 
 # Run the Flask app
 if __name__ == "__main__":
